@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
+import {validateForm} from '../../form/formFramework';
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -83,14 +84,9 @@ export default class Auth extends React.Component {
 
         formControls[controlName] = control;
 
-        let isFormValid = true;
-
-        Object.keys(formControls).forEach(name => {
-            isFormValid = formControls[name].valid && isFormValid;
-        });
-
         this.setState({
-            formControls, isFormValid
+            formControls, 
+            isFormValid: validateForm(formControls)
         });
     }
 

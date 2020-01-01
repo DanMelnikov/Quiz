@@ -4,6 +4,7 @@ import Button from '../../components/UI/Button/Button';
 import {createControl, validate, validateForm} from '../../form/formFramework';
 import Input from '../../components/UI/Input/Input';
 import Select from '../../components/UI/Select/Select';
+import axios from 'axios';
 
 function createOptionControl(optionNumber) {
     return createControl({
@@ -15,6 +16,10 @@ function createOptionControl(optionNumber) {
 
 function createFormControls() {
     return {
+        // quizName: createControl({
+        //     label: "Введите название теста",
+        //     errorMessage: 'Название не может быть пустым'
+        // }, { required: true }),
         question: createControl({
             label: 'Введите вопрос',
             errorMessage: 'Вопрос не может быть пустым'
@@ -65,8 +70,19 @@ export default class QuizCreator extends React.Component {
         });
     }
 
-    createQuizHandler = () => {
-        console.log(this.state)
+    createQuizHandler = async () => {
+        try {
+            await axios.post('https://quiz-75e07.firebaseio.com/quizes.json', this.state.quiz);
+            
+            this.setState({
+                quiz: [],
+                isFormValid: false,
+                rightAnswerId: 1,
+                formControls: createFormControls()
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     changeHandler = (value, controlName) => {
